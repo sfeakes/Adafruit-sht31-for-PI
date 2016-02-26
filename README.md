@@ -10,14 +10,14 @@
 ### Enable i2c on the PI in the usual way ###
 - Run raspi-confid -> select enable i2c
 
--   -- or --
+   -- or --
 - This is for raspbian jessie, wheezy is different.
 - edit /etc/modules and add
--    i2c-bcm2708
--    ic2-dev
+- -   i2c-bcm2708
+- -   ic2-dev
 - edit /boot/config and add
--    dtparam=i2c_arm=on
--    dtparam=i2c1_baudrate=100000   <-  This is default, remove 1 zero for this sht31 implimentation to work.
+- -   dtparam=i2c_arm=on
+- -   dtparam=i2c1_baudrate=100000   <-  This is default, remove 1 zero for this sht31 implimentation to work.
  
 ## Prerequisites ##
  
