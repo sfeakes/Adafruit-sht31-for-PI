@@ -16,6 +16,8 @@
 #define SHT31_HEATER_ENABLE        0x306D
 #define SHT31_HEATER_DISABLE       0x3066
 
+#define SHT32_DEFAULT_READ         SHT31_MEAS_MEDREP
+
 // Tempoary measure to fix the first write fail
 #define SHT31D_FIX_INITIAL_FAIL 1
 
@@ -32,7 +34,9 @@ int sht31_open(int i2c_address, uint8_t sht31_address);
 int sht31_close(int file);
 
 void delay (unsigned int howLong);
+uint8_t crc8(const uint8_t *data, int len);
 
+sht31rtn writeandread(int fd, uint16_t sndword, uint8_t *buffer, int readsize);
 sht31rtn gettempandhumidity(int file, float *temp, float *hum);
 sht31rtn getstatus(int file, uint16_t *rtnbuf);
 //sht31rtn getserialnum(int file, uint8_t *buf);

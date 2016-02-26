@@ -32,8 +32,6 @@
 
 #include "sht31-d.h"
 
-int writeandread(int fd, uint16_t sndword, uint8_t *buffer, int readsize);
-uint8_t crc8(const uint8_t *data, int len);
 
 /*
  * delay:
@@ -104,7 +102,7 @@ int sht31_open(int i2c_address, uint8_t sht31_address)
   // Do an itial read & write of basically nothing.
   // Still working on this, but without it the first command issued failes, these will also usually fail
 #ifdef SHT31D_FIX_INITIAL_FAIL
-  uint8_t buf = 0x44;
+  uint8_t buf = 0x00;
   if (write(fp, &buf, 1) != 1) {}
   if ( read(fp, &buf, 1) != 1) {} 
 #endif
@@ -123,30 +121,31 @@ int sht31_close(int fp)
  *********************************************************************************
  */
 
-int writeandread(int fp, uint16_t sndword, uint8_t *buffer, int readsize)
+sht31rtn writeandread(int fp, uint16_t sndword, uint8_t *buffer, int readsize)
 {
   int rtn;
-  uint8_t snd[2];
+  int sendsize = 2;
+  uint8_t snd[sendsize];
   
   // big-endian - Split the 16bit word into two 8 bits that are flipped.
   snd[0]=(sndword >> 8) & 0xff;
   snd[1]=sndword & 0xff;
 
-  rtn = write(fp, snd, 2);
-  if ( rtn != 2 ) {
+  rtn = write(fp, snd, sendsize);
+  if ( rtn != sendsize ) {
     //printf("ERROR sending command %d :- %s\n",rtn, strerror (errno));
-    return 1;
+    return SHT31_WRITE_FAILED;
   } 
-  
+
   if (readsize > 0) {
     delay(10);
     rtn = read(fp, buffer, readsize);
     if ( rtn < readsize) {
-      return 2;
+      return SHT31_READ_FAILED;
     }
   }
   
-  return 0;
+  return SHT31_OK;
 }
 
 /*
@@ -184,7 +183,7 @@ sht31rtn gettempandhumidity(int file, float *temp, float *hum)
   uint8_t buf[10];
   int rtn;
   
-  rtn = writeandread(file, SHT31_MEAS_MEDREP_STRETCH, buf, 6);
+  rtn = writeandread(file, SHT32_DEFAULT_READ, buf, 6);
   
   if (rtn != SHT31_OK)
     return rtn;

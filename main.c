@@ -1,5 +1,5 @@
 /*
- *
+ * Simple example 
  * 
  */
 #include <stdint.h>
@@ -71,6 +71,7 @@ int main(int argc, char *argv[])
     }
       
     delay(20);
+    delay(30);
   }
   
 
@@ -149,7 +150,7 @@ void printserialnum(int file)
   }
     
   if ( rtn == SHT31_OK || rtn == SHT31_CRC_CHECK_FAILED) {
-    printf("Serial# = %x\n",serialNo);
+    printf("Serial# = 0x%x\n",serialNo);
   }
   
 }
