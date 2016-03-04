@@ -70,11 +70,9 @@ int main(int argc, char *argv[])
       printf("ERROR :- '%s' unknown option\n",argv[i]);
     }
       
-    delay(20);
     delay(30);
   }
   
-
   sht31_close(file);
   
   return 0;
